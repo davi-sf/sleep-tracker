@@ -1,7 +1,8 @@
 import React from "react";
-import { Card, ListGroup, Badge } from "react-bootstrap";
+import { Card, ListGroup, Badge, Button } from "react-bootstrap";
+import { Trash } from 'react-bootstrap-icons';
 
-const WeeklyHistory = ({ sleeps }) => {
+const WeeklyHistory = ({ sleeps, deleteSleep }) => {
   const sleepsByDate = {};
   sleeps.forEach(record => {
     const dateStr = new Date(record.start).toLocaleDateString("pt-BR");
@@ -24,12 +25,9 @@ const WeeklyHistory = ({ sleeps }) => {
   const yesterdayStr = yesterday.toLocaleDateString("pt-BR");
 
   const sortedDates = Object.keys(sleepsByDate)
-  .map(dateStr => ({ 
-    dateStr, 
-    dateObj: new Date(sleepsByDate[dateStr][0].start) 
-  }))
-  .sort((a, b) => b.dateObj - a.dateObj)
-  .map(item => item.dateStr);
+    .map(dateStr => ({ dateStr, dateObj: new Date(sleepsByDate[dateStr][0].start) }))
+    .sort((a, b) => b.dateObj - a.dateObj)
+    .map(item => item.dateStr);
 
   return (
     <div className="mt-4">
@@ -47,10 +45,23 @@ const WeeklyHistory = ({ sleeps }) => {
             <Card.Header className="text-capitalize">{`${dateStr} - ${dayLabel}`}</Card.Header>
             <ListGroup variant="flush">
               {sleepsByDate[dateStr].map((sleep, index) => (
-                <ListGroup.Item key={index}>
-                  Início: {new Date(sleep.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} | 
-                  Fim: {new Date(sleep.end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} | 
-                  Duração: <Badge bg="secondary">{formatDuration(sleep.start, sleep.end)}</Badge>
+                <ListGroup.Item key={index} className="d-flex justify-content-between align-items-center">
+                  <div>
+                    Início: {new Date(sleep.start).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} | 
+                    Fim: {new Date(sleep.end).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} | 
+                    Duração: <Badge bg="secondary">{formatDuration(sleep.start, sleep.end)}</Badge>
+                  </div>
+                      <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => {
+                              if (window.confirm("Tem certeza que deseja apagar esta soneca?")) {
+                                  deleteSleep(dateStr, index);
+                              }
+                          }}
+                      >
+                          <Trash />
+                      </Button>
                 </ListGroup.Item>
               ))}
             </ListGroup>

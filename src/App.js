@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import WeeklyHistory from "./WeeklyHistory";
 import { Container, Button } from "react-bootstrap";
+import WeeklyHistory from "./WeeklyHistory";
 import SleepTimer from "./SleepTimer";
 import SleepForm from "./SleepForm";
 
@@ -48,34 +48,47 @@ function App() {
     localStorage.setItem("sleeps", JSON.stringify(updated));
   };
 
-return (
-  <Container className="py-4">
-    <h1 className="mb-4">Soneca Bernardo</h1>
+  const deleteSleep = (dateStr, index) => {
+    const sleepsByDate = {};
+    sleeps.forEach(record => {
+      const key = new Date(record.start).toLocaleDateString("pt-BR");
+      if (!sleepsByDate[key]) sleepsByDate[key] = [];
+      sleepsByDate[key].push(record);
+    });
+    sleepsByDate[dateStr].splice(index, 1);
+    const updated = Object.values(sleepsByDate).flat();
+    setSleeps(updated);
+    localStorage.setItem("sleeps", JSON.stringify(updated));
+  };
 
-    {sleepInProgress ? (
-      <SleepTimer sleepInProgress={sleepInProgress} onEnd={endSleep} />
-    ) : (
-      <Button onClick={startSleep} className="mb-3">Iniciar Soneca</Button>
-    )}
+  return (
+    <Container className="py-4">
+      <h1 className="mb-4">Soneca Bernardo</h1>
 
-    {!sleepInProgress && (
-      <Button 
-        variant="secondary" 
-        className="mb-3 ms-2" 
-        onClick={() => setShowManualForm(!showManualForm)}
-      >
-        {showManualForm ? "Fechar Registro Manual" : "Registrar Soneca Manual"}
-      </Button>
-    )}
+      {sleepInProgress ? (
+        <SleepTimer sleepInProgress={sleepInProgress} onEnd={endSleep} />
+      ) : (
+        <Button onClick={startSleep} className="mb-3">Iniciar Soneca</Button>
+      )}
 
-    {!sleepInProgress && showManualForm && <SleepForm addSleep={addManualSleep} />}
+      {!sleepInProgress && (
+        <Button 
+          variant="secondary" 
+          className="mb-3 ms-2" 
+          onClick={() => setShowManualForm(!showManualForm)}
+        >
+          {showManualForm ? "Fechar Registro Manual" : "Registrar Soneca Manual"}
+        </Button>
+      )}
 
-    <WeeklyHistory sleeps={sleeps} />
+      {!sleepInProgress && showManualForm && <SleepForm addSleep={addManualSleep} />}
 
-    {sleeps.length > 0 && (
-      <Button variant="danger" className="mt-3" onClick={clearHistory}>Limpar Histórico</Button>
-    )}
-  </Container>
+      <WeeklyHistory sleeps={sleeps} deleteSleep={deleteSleep} />
+
+      {sleeps.length > 0 && (
+        <Button variant="danger" className="mt-3" onClick={clearHistory}>Limpar Histórico</Button>
+      )}
+    </Container>
   );
 }
 
