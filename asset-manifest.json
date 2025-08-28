@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/sleep-tracker/static/css/main.3b71cc2a.css",
-    "main.js": "/sleep-tracker/static/js/main.15bd717e.js",
+    "main.js": "/sleep-tracker/static/js/main.b0a1632c.js",
     "static/js/453.2d214f98.chunk.js": "/sleep-tracker/static/js/453.2d214f98.chunk.js",
     "index.html": "/sleep-tracker/index.html",
     "main.3b71cc2a.css.map": "/sleep-tracker/static/css/main.3b71cc2a.css.map",
-    "main.15bd717e.js.map": "/sleep-tracker/static/js/main.15bd717e.js.map",
+    "main.b0a1632c.js.map": "/sleep-tracker/static/js/main.b0a1632c.js.map",
     "453.2d214f98.chunk.js.map": "/sleep-tracker/static/js/453.2d214f98.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.3b71cc2a.css",
-    "static/js/main.15bd717e.js"
+    "static/js/main.b0a1632c.js"
   ]
 }
